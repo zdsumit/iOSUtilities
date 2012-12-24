@@ -22,7 +22,13 @@
         } else
             return UIDevice_iPhoneStandardRes;
     } else
-        return (([[UIScreen mainScreen] respondsToSelector: @selector(scale)]) ? UIDevice_iPadHiRes : UIDevice_iPadStandardRes);
+        if ([[UIScreen mainScreen] respondsToSelector: @selector(scale)]) {
+            CGSize result = [[UIScreen mainScreen] bounds].size;
+            result = CGSizeMake(result.width * [UIScreen mainScreen].scale, result.height * [UIScreen mainScreen].scale);
+            if (result.height == 1024) return UIDevice_iPadStandardRes;
+            return UIDevice_iPadHiRes;
+        } else
+            return UIDevice_iPadStandardRes;
 }
 
 @end
